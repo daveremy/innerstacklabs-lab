@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inner Stack Labs · Lab</title>
+<meta name="description" content="Inner Stack Labs builds software and practices for personal development. The Lab publishes decks, papers and field notes from the work.">
+<meta property="og:title" content="Inner Stack Labs · Lab">
+<meta property="og:description" content="Decks, papers and field notes on software and personal development.">
+<meta property="og:url" content="https://lab.innerstacklabs.com/">
+<meta property="og:image" content="https://lab.innerstacklabs.com/agent-scrum/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f0;--surface:#ffffff;--fg:#1a1c1b;--muted:#5e625f;--faint:#8b8f8c;
+  --line:#e2ded5;--accent:#2f5d50;--accent-fg:#ffffff;--accent-soft:#e3ece8;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121413;--surface:#1a1d1c;--fg:#ebe9e4;--muted:#a3a8a5;--faint:#7a7f7c;
+  --line:#2a2e2c;--accent:#8fc4b3;--accent-fg:#0f1412;--accent-soft:#1f2a26;
+}}
+:root[data-theme="dark"]{
+  --bg:#121413;--surface:#1a1d1c;--fg:#ebe9e4;--muted:#a3a8a5;--faint:#7a7f7c;
+  --line:#2a2e2c;--accent:#8fc4b3;--accent-fg:#0f1412;--accent-soft:#1f2a26;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+@media (min-width:720px){.wrap{padding:0 32px}}
+
+header.top{border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;letter-spacing:-.01em}
+.mark{width:26px;height:26px;border-radius:6px;background:var(--accent);position:relative;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;left:5px;right:5px;height:3px;border-radius:2px;background:var(--accent-fg)}
+.mark::before{top:8px}.mark::after{top:15px;right:9px}
+.brand small{font-weight:500;color:var(--faint);margin-left:2px}
+nav a{color:var(--muted);text-decoration:none;font-size:15px;margin-left:20px}
+nav a:hover{color:var(--fg)}
+
+.hero{padding:64px 0 40px}
+@media (min-width:720px){.hero{padding:96px 0 56px}}
+.eyebrow{font:500 12px/1 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 18px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:40px;line-height:1.08;letter-spacing:-.02em;margin:0 0 20px;max-width:16ch}
+@media (min-width:720px){h1{font-size:60px}}
+.lede{font-size:18px;color:var(--muted);max-width:56ch;margin:0}
+
+.section-head{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);padding:28px 0 8px}
+.section-head h2{font:500 12px/1 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0}
+.section-head span{font-size:14px;color:var(--faint)}
+
+.pubs{display:grid;gap:20px;padding:16px 0 72px}
+@media (min-width:860px){.pubs{grid-template-columns:1fr 1fr;gap:28px}}
+.pub{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.cover{display:block;aspect-ratio:1500/785;background:var(--accent-soft);border-bottom:1px solid var(--line)}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.body{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:500 12px/1 "IBM Plex Mono",monospace;color:var(--faint);margin:0 0 12px}
+.tag{background:var(--accent-soft);color:var(--accent);padding:4px 8px;border-radius:99px;letter-spacing:.04em}
+.pub h3{font-family:Fraunces,Georgia,serif;font-size:26px;line-height:1.2;font-weight:600;letter-spacing:-.01em;margin:0 0 10px}
+.pub h3 a{text-decoration:none}
+.pub h3 a:hover{text-decoration:underline;text-underline-offset:3px}
+.pub p{color:var(--muted);margin:0 0 20px}
+.actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:99px;font-weight:500;font-size:15px;text-decoration:none;border:1px solid var(--line)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.secondary:hover{border-color:var(--faint)}
+.extras{width:100%;font-size:13px;color:var(--faint);margin-top:6px}
+.extras a{color:var(--faint);text-underline-offset:2px}
+.extras a:hover{color:var(--fg)}
+
+.about{border-top:1px solid var(--line);padding:40px 0 56px;display:grid;gap:12px}
+@media (min-width:720px){.about{grid-template-columns:220px 1fr;gap:32px}}
+.about h2{font:500 12px/1.6 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0}
+.about p{margin:0 0 12px;color:var(--muted);max-width:62ch}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color:var(--faint)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+footer a{color:var(--faint);text-decoration:none}
+footer a:hover{color:var(--fg)}
+</style></head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><span class="mark" aria-hidden="true"></span>Inner Stack Labs <small>/ Lab</small></a>
+  <nav><a href="#work">Work</a><a href="#about">About</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Inner Stack Labs · Lab</p>
+    <h1>Notes from building software and ourselves.</h1>
+    <p class="lede">Inner Stack Labs makes software and practices for personal development. The Lab is where we publish what we learn along the way: decks, papers and field notes, with the numbers behind them.</p>
+  </section>
+
+  <div class="section-head" id="work"><h2>Latest work</h2><span>2 publications</span></div>
+  <section class="pubs">
+
+    <article class="pub">
+      <a class="cover" href="agent-scrum/deck/" aria-label="Agent Scrum deck"><img src="agent-scrum/og-cover.png" alt="" loading="lazy"></a>
+      <div class="body">
+        <div class="meta"><span class="tag">Deck + paper</span><span>Oct 2026</span><span>16 slides</span></div>
+        <h3><a href="agent-scrum/deck/">Agent Scrum</a></h3>
+        <p>A sprint method for teams of AI coding agents, with observations from 324 two-hour sprints: 79% of committed stories done within the sprint, under five minutes of ceremony each.</p>
+        <div class="actions">
+          <a class="btn primary" href="agent-scrum/deck/">View the deck →</a>
+          <a class="btn secondary" href="agent-scrum/">Read the paper</a>
+          <div class="extras"><a href="agent-scrum/deck.pdf">Deck PDF</a> · <a href="agent-scrum/agent-scrum.pdf">Paper PDF</a> · <a href="https://doi.org/10.5281/zenodo.23771171">DOI</a> · <a href="https://github.com/daveremy/agent-scrum">Source</a></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="pub">
+      <a class="cover" href="persistent-agents/deck/" aria-label="Persistent Agents deck"><img src="persistent-agents/og-cover.png" alt="" loading="lazy"></a>
+      <div class="body">
+        <div class="meta"><span class="tag">Deck + paper</span><span>Oct 2026</span><span>16 slides</span></div>
+        <h3><a href="persistent-agents/deck/">Persistent Agents on Claude Code</a></h3>
+        <p>How an engineer who already uses Claude Code can run always-on personal agents with Claude Code alone: nine named agents, eight months, one Linux server, no agent framework.</p>
+        <div class="actions">
+          <a class="btn primary" href="persistent-agents/deck/">View the deck →</a>
+          <a class="btn secondary" href="persistent-agents/">Read the paper</a>
+          <div class="extras"><a href="persistent-agents/deck.pdf">Deck PDF</a> · <a href="persistent-agents/persistent-agents.pdf">Paper PDF</a> · <a href="https://doi.org/10.5281/zenodo.23787645">DOI</a> · <a href="https://github.com/daveremy/persistent-agents">Source</a></div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <section class="about" id="about">
+    <h2>About</h2>
+    <div>
+      <p>Inner Stack Labs is Dave Remy's company for software and personal development. We build tools such as Neuralingual, which offers spoken coaching for high performers, and we run our own work with a team of persistent AI agents.</p>
+      <p>Everything here comes from that daily practice. We write up what worked, what we measured, and what we changed.</p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>© 2026 Inner Stack Labs</span>
+  <span><a href="https://github.com/daveremy">GitHub</a> · <a href="https://x.com/daveremy">X</a> · <a href="https://neuralingual.com">Neuralingual</a></span>
+</div></footer>
+</body></html>

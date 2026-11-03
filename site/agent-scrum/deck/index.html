@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Scrum: the deck</title>
+<meta name="description" content="Agent Scrum in 16 slides: a sprint methodology for AI agent teams, with observations from 324 sprints.">
+<meta property="og:title" content="Agent Scrum: the deck">
+<meta property="og:description" content="Agent Scrum in 16 slides: a sprint methodology for AI agent teams, with observations from 324 sprints.">
+
+
+<style>
+html,body{margin:0;height:100%;background:#0f1418;overflow:hidden}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#frame{width:1920px;height:1080px;position:relative;transform-origin:center center;flex:none}
+#frame>section{position:absolute;inset:0;box-sizing:border-box;overflow:hidden}
+#frame>section:not(.on){display:none !important}
+section *{margin:0;box-sizing:border-box}
+section ul,section ol{padding-left:1.2em}
+section table{border-collapse:collapse;width:100%}
+section th,section td{text-align:left;padding:.35em .6em;border-bottom:1px solid rgba(127,127,127,.35);vertical-align:top}
+section th{font-weight:700}
+x-connector{display:block;position:relative;border-top:4px solid currentColor;align-self:center;flex:none}
+x-connector[head="end"]::after,x-connector[head="both"]::after{content:"";position:absolute;right:-2px;top:-10px;border-left:14px solid currentColor;border-top:8px solid transparent;border-bottom:8px solid transparent}
+x-connector[head="both"]::before{content:"";position:absolute;left:-2px;top:-10px;border-right:14px solid currentColor;border-top:8px solid transparent;border-bottom:8px solid transparent}
+#credit{position:fixed;bottom:16px;left:16px;font:14px system-ui,sans-serif;color:#9aa7b0}
+#nav{position:fixed;bottom:12px;right:16px;font:14px system-ui,sans-serif;color:#9aa7b0;display:flex;gap:8px;align-items:center}
+#nav button{background:#1f2a33;color:#e6ecef;border:0;border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer}
+</style></head><body>
+<div id="stage"><div id="frame">
+<section id="cover" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px" data-ss-id="auto-section-a9dhh2">
+<div style="position:absolute;left:0;top:0;width:24px;height:1080px;background:#2F6FDF"></div>
+<p style="font-size:32px;font-weight:600;color:#2F6FDF;letter-spacing:4px;text-transform:uppercase" data-ss-id="auto-p-c1o8rm">Working paper · v0.1</p>
+<h1 style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.05;color:#1C2433" data-ss-id="auto-h1-k2gcco">Agent Scrum</h1>
+<p style="font-size:44px;line-height:1.3;color:#4A5568;width:1400px" data-ss-id="auto-p-okdslf">A sprint methodology for AI agent teams, with observations from 324 sprints</p>
+<div style="width:160px;height:6px;background:#D9772B"></div>
+<p style="font-size:32px;color:#1C2433" data-ss-id="auto-p-orrpfi">Dave Remy · 28 October 2026 · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="numbers" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px" data-ss-id="auto-section-1opyo0">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-wlfs3p">38 days, one real backlog</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:40px;border-radius:16px">
+<p style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#2F6FDF" data-ss-id="auto-p-y368pz">324</p>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-u8gfeg">two-hour sprints, run around the clock, 20 Sep to 28 Oct 2026</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:40px;border-radius:16px">
+<p style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#2F6FDF" data-ss-id="auto-p-hy5h0h">79%</p>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-ozy5m3">of committed stories done inside the sprint (297 of 375, team sprints)</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:40px;border-radius:16px">
+<p style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#D9772B" data-ss-id="auto-p-86ngry">&lt;5 min</p>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-c0fz8u">of ceremony per sprint: starting plus wrapping</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:40px;border-radius:16px">
+<p style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#D9772B" data-ss-id="auto-p-cyh168">&lt;2 h</p>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-ymwe3m">a day of human time, usually under one hour</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="why" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px" data-ss-id="auto-section-swcs67">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-kqcjni">Why sprints at all?</h2>
+<p style="font-size:32px;line-height:1.4;color:#4A5568;width:1500px" data-ss-id="auto-p-62p2ys">Scrum was not the plan. The first sprint came from a request for sessions that end in a summary and a retrospective. Every later device was adopted reluctantly, one at a time, to answer a specific failure. The boundary does three jobs that an open queue tends to postpone:</p>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#EEF1F5;padding:40px;border-radius:16px;border-top:8px solid #2F6FDF">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:44px;font-weight:700;line-height:1.2" data-ss-id="auto-h3-5x4q7y">Clear the context</h3>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-8z1i59">Write a durable handoff and start fresh on a schedule, before the context fills and quality drops.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#EEF1F5;padding:40px;border-radius:16px;border-top:8px solid #2F6FDF">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:44px;font-weight:700;line-height:1.2" data-ss-id="auto-h3-mfdmm4">Count spillover</h3>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-nkco4x">Unfinished work is saved and accounted for, not left to pile up silently.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#EEF1F5;padding:40px;border-radius:16px;border-top:8px solid #2F6FDF">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:44px;font-weight:700;line-height:1.2" data-ss-id="auto-h3-27y2c8">Compare honestly</h3>
+<p style="font-size:32px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-qk6ywc">Committed against done, every two hours, which is what makes velocity and planning possible.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-2">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="mapping" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-2zmh7i">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-6mlnj7">Scrum, rescaled for agents</h2>
+<table style="font-family:'Public Sans', Arial, sans-serif;font-size:28px;color:#1C2433" data-ss-id="auto-table-w62ney">
+<tr style="background:#EEF1F5"><th style="width:24%;text-align:left">Scrum</th><th style="width:76%;text-align:left">Agent Scrum</th></tr>
+<tr><td>Stakeholder</td><td>The human: direction, judgment, taste</td></tr>
+<tr><td>Product owner</td><td>The CTO agent: backlog, planning, rulings; runs no sprints</td></tr>
+<tr><td>Scrum master</td><td>A scrum-team agent, started on demand, one sprint at a time</td></tr>
+<tr><td>Developers</td><td>Short-lived developer and reviewer agents in isolated worktrees</td></tr>
+<tr><td>Sprint length</td><td>Two hours, on fixed boxes starting at odd hours</td></tr>
+<tr><td>Velocity</td><td>Rolling merged points per sprint, plus token velocity</td></tr>
+<tr><td>Daily stand-up</td><td>None: a live board instead</td></tr>
+<tr><td>Retrospective</td><td>Every wrap; each finding ends in an issue, a fix or a reason</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-3">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="roles" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px" data-ss-id="auto-section-1yroqj">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-t1iqj3">Who does what</h2>
+<div style="display:flex;flex-direction:row;align-items:center;gap:12px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FAF8F3;padding:28px;border:3px solid #1C2433;border-radius:16px">
+<p style="font-size:28px;font-weight:700;line-height:1.2" data-ss-id="auto-p-40pq27">Human</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-rvake4">Stakeholder: direction, taste, irreversible yeses</p>
+</div>
+<x-connector head="both" style="width:56px;height:4px;color:#4A5568;border-width:4px"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:28px;border:3px solid #2F6FDF;border-radius:16px">
+<p style="font-size:28px;font-weight:700;line-height:1.2" data-ss-id="auto-p-j5ox22">Product owner</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-s9hv0i">The CTO agent: backlog, planning, rulings</p>
+</div>
+<x-connector head="end" style="width:56px;height:4px;color:#4A5568;border-width:4px"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FAF8F3;padding:28px;border:3px dashed #4A5568;border-radius:16px">
+<p style="font-size:28px;font-weight:700;line-height:1.2" data-ss-id="auto-p-8zw3n8">Sprint backlog</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-qfnbn9">A committed file, checked by a linter</p>
+</div>
+<x-connector head="end" style="width:56px;height:4px;color:#4A5568;border-width:4px"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:28px;border:3px solid #D9772B;border-radius:16px">
+<p style="font-size:28px;font-weight:700;line-height:1.2" data-ss-id="auto-p-rldmyt">Scrum master</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-crdmu2">The scrum-team agent: runs one sprint</p>
+</div>
+<x-connector head="end" style="width:56px;height:4px;color:#4A5568;border-width:4px"></x-connector>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:28px;border:3px solid #D9772B;border-radius:16px">
+<p style="font-size:28px;font-weight:700;line-height:1.2" data-ss-id="auto-p-yqzvu3">Developers, reviewers</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-ru5dbk">Short-lived agents in isolated worktrees</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:2;display:flex;flex-direction:column;gap:8px;padding:28px;border-left:8px solid #2F6FDF">
+<p style="font-size:32px;font-weight:700;line-height:1.3;color:#2F6FDF" data-ss-id="auto-p-w75kph">Conversation and planning</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-hs8ool">Stay with one human-facing agent. It never runs a sprint.</p>
+</div>
+<div style="flex:3;display:flex;flex-direction:column;gap:8px;padding:28px;border-left:8px solid #D9772B">
+<p style="font-size:32px;font-weight:700;line-height:1.3;color:#D9772B" data-ss-id="auto-p-6fs8ag">Execution</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-rw8jll">Moves to scrum-team agents started on demand. A second team is a second instance of the same definition; designed, not yet funded.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-4">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="evolution" data-transition="fade" style="background:#EEF1F5;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px" data-ss-id="auto-section-gqntyl">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-e3wssq">Splitting conversation from execution</h2>
+<div style="display:flex;gap:48px">
+<div style="flex:3;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:4px;padding-left:28px;border-left:6px solid #4A5568">
+<p style="font-size:24px;font-weight:700;color:#4A5568;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-2z5sr2">20 Sep · sprints 1 to 234</p>
+<p style="font-size:32px;line-height:1.4" data-ss-id="auto-p-v3mu4v">The CTO agent ran every sprint itself, and also talked with me. One context window, two jobs; each degraded the other.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;padding-left:28px;border-left:6px solid #2F6FDF">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-g9kc6d">19 Oct · the split</p>
+<p style="font-size:32px;line-height:1.4" data-ss-id="auto-p-ntcb9c">A scrum team became a class of agent, started on demand. The CTO agent keeps the conversation and the backlog.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;padding-left:28px;border-left:6px solid #D9772B">
+<p style="font-size:24px;font-weight:700;color:#D9772B;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-4gufcp">Since 20 Oct</p>
+<p style="font-size:32px;line-height:1.4" data-ss-id="auto-p-b3qzz1">The dedicated team ran every sprint: 90 so far. The CTO agent runs none.</p>
+</div>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:20px;background:#FAF8F3;padding:40px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#4A5568;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-msmloo">Throughput did not change</p>
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1" data-ss-id="auto-p-488f7j">72% → 71%</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-b754d0">committed points merged in sprint, CTO-run vs team-run</p>
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1" data-ss-id="auto-p-63anfg">7.4 → 7.8</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-unjajh">points merged per sprint</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-5">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="planning" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-v8yivd">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-ca5p96">Planning, from months to hours</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:32px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-6ry754">Months</p>
+<p style="font-size:32px;font-weight:700;line-height:1.2" data-ss-id="auto-p-2bde6l">Issues, epics, milestones</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-p2kcxg">All work is an issue, filed with a priority and its epic</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:32px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-qf5y5f">Weeks</p>
+<p style="font-size:32px;font-weight:700;line-height:1.2" data-ss-id="auto-p-omtsux">Backlog order</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-fzcoa0">One ranked list across all repositories</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:32px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-fejjs5">A week</p>
+<p style="font-size:32px;font-weight:700;line-height:1.2" data-ss-id="auto-p-e84pws">Weekly plan</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-8u2d69">Two or three goals; 15 to 20 min of refinement with the human</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:32px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-m26jmh">Hours</p>
+<p style="font-size:32px;font-weight:700;line-height:1.2" data-ss-id="auto-p-r35hu5">Sprint backlog</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-6l174v">Committed an hour ahead; the next two always ready</p>
+</div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:24px 32px;border-left:8px solid #D9772B">
+<p style="font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-p-28ndib">Definition of Ready</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-23q0rj">Four fresh reads within 12 hours of the sprint, a size, a brief and a stop rule</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:24px 32px;border-left:8px solid #D9772B">
+<p style="font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-p-0n13b6">Overflow 1.5×</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-ak1rnk">Ready stretch work worth 1.5 times the commitment, after the team ran dry three times in one night</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-6">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="loop" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-jvwe7k">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-smlsrp">A deadline the agent does not hold</h2>
+<div style="position:relative;width:1664px;height:300px">
+<p style="position:absolute;left:0;top:48px;width:400px;font-size:24px;font-weight:700;color:#4A5568" data-ss-id="auto-p-jbz79z">0:00 sprint starts</p>
+<p style="position:absolute;left:1200px;top:48px;width:440px;font-size:24px;font-weight:700;color:#1C2433;text-align:right" data-ss-id="auto-p-8wcalu">2:00 boundary</p>
+<div style="position:absolute;left:0;top:100px;width:1307px;height:56px;background:#2F6FDF;border-radius:8px 0 0 8px;padding:10px 24px">
+<p style="font-size:24px;font-weight:600;color:#FAF8F3" data-ss-id="auto-p-0vtzcg">Waves of developer and reviewer agents: build, review, fix, merge</p>
+</div>
+<div style="position:absolute;left:1307px;top:100px;width:119px;height:56px;background:#D9772B"></div>
+<div style="position:absolute;left:1426px;top:100px;width:238px;height:56px;border:3px dashed #4A5568;border-radius:0 8px 8px 0"></div>
+<div style="position:absolute;left:1424px;top:84px;width:4px;height:88px;background:#1C2433"></div>
+<p style="position:absolute;left:0;top:184px;width:620px;font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-xx6gmc">Start: check the commitment, lease the repositories, launch the first wave (median 0.6 min)</p>
+<p style="position:absolute;left:900px;top:184px;width:500px;font-size:24px;line-height:1.4;color:#D9772B;font-weight:700;text-align:right" data-ss-id="auto-p-52vuar">T−10: a timer outside the agent requests the wrap</p>
+<p style="position:absolute;left:1440px;top:184px;width:224px;font-size:24px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-lw5krh">T+20: a watchdog checks it wrapped</p>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:32px 40px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#4A5568;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-6aehc0">Before · sprint 43</p>
+<p style="font-size:32px;line-height:1.4" data-ss-id="auto-p-lxvl89">The wrap timer lived inside the agent’s session. It never fired, and the sprint overran by about 100 minutes.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:32px 40px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#4A5568;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-nmhwp5">After · trigger outside the agent</p>
+<p style="font-size:32px;line-height:1.4" data-ss-id="auto-p-2z0axe">58 of its last 60 firings delivered the wrap; 2 reported an error. It never interrupts a running step.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-7">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="merging" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-6z4t0d">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-xm59dp">Who merges what</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:36px 40px;border-radius:16px;border-left:8px solid #2F6FDF">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-h3-pcpqah">The team merges what its Definition of Done can judge</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-fijpxt">Ordinary, reversible changes in its leased scope, reviewed by risk, CI green. Most work.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:36px 40px;border-radius:16px;border-left:8px solid #2F6FDF">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-h3-a0jwq8">No agent merges the rules that govern it</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-icsekg">Instructions, skills, merge rules and gates go to the product owner.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:36px 40px;border-radius:16px;border-left:8px solid #D9772B">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-h3-9ancvh">Irreversible changes need the human’s yes</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-a2lsra">Money, auth, production data, releases. Collected at planning, so the sprint never waits.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#EEF1F5;padding:36px 40px;border-radius:16px;border-left:8px solid #D9772B">
+<h3 style="font-family:'Domine', Georgia, serif;font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-h3-c9zxfd">When in doubt, ask</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-8tbvgq">If the class is unclear, raise an impediment instead of guessing.</p>
+</div>
+</div>
+<p style="font-family:'Domine', Georgia, serif;font-size:32px;font-style:italic;line-height:1.4;color:#1C2433" data-ss-id="auto-p-12m6rk">Authority follows the ability to judge consequences.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-8">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="points" data-transition="fade" style="background:#EEF1F5;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px" data-ss-id="auto-section-4z4ji8">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-qj2qqm">Points, velocity and token velocity</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FAF8F3;padding:40px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-f7b1cq">Points</p>
+<div style="display:flex;gap:12px">
+<p style="font-size:32px;font-weight:700;background:#2F6FDF;color:#FAF8F3;padding:8px 20px;border-radius:12px" data-ss-id="auto-p-fvalkp">1</p>
+<p style="font-size:32px;font-weight:700;background:#2F6FDF;color:#FAF8F3;padding:8px 20px;border-radius:12px" data-ss-id="auto-p-i5s5vl">2</p>
+<p style="font-size:32px;font-weight:700;background:#2F6FDF;color:#FAF8F3;padding:8px 20px;border-radius:12px" data-ss-id="auto-p-lvouww">3</p>
+<p style="font-size:32px;font-weight:700;background:#2F6FDF;color:#FAF8F3;padding:8px 20px;border-radius:12px" data-ss-id="auto-p-sjbgn2">5</p>
+<p style="font-size:32px;font-weight:700;background:#2F6FDF;color:#FAF8F3;padding:8px 20px;border-radius:12px" data-ss-id="auto-p-7u5tyg">8</p>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-s14ama">One estimator, the product owner. A linter rejects other values and over-committed backlogs. Recent sprints commit 13 points.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FAF8F3;padding:40px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#D9772B;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-9z6a9t">Token velocity</p>
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1" data-ss-id="auto-p-ee1sxc">0.27–0.68</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-h5pbbj">million tokens per merged point, recent sprints, Claude side only. Points times token velocity is a budget.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FAF8F3;padding:40px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2F6FDF;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-p22o2y">Capacity</p>
+<p style="font-size:32px;font-weight:700;line-height:1.3" data-ss-id="auto-p-8iq95w">Rate limits, not headcount</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-wck9he">The 5-hour window caps how many developers work at once. The 7-day window is the real weekly capacity.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-9">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="impediments" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px" data-ss-id="auto-section-0etqxo">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-0pbwik">The team never asks the human</h2>
+<div style="display:flex;gap:64px">
+<div style="width:480px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#2F6FDF" data-ss-id="auto-p-dz4365">130</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-2biw7z">requests to the product owner in the team’s first nine days</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#D9772B" data-ss-id="auto-p-vi39ss">1 min</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-cph0qi">median time to a ruling (75th percentile: 3 min)</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;color:#4A5568;letter-spacing:2px;text-transform:uppercase" data-ss-id="auto-p-y4zgm8">Requests by class</p>
+<div style="display:flex;align-items:center;gap:16px"><p style="width:220px;font-size:28px" data-ss-id="auto-p-7qnr1o">Scope</p><div style="width:800px;height:44px;background:#2F6FDF;border-radius:6px"></div><p style="font-size:28px;font-weight:700" data-ss-id="auto-p-t7g2ao">82</p></div>
+<div style="display:flex;align-items:center;gap:16px"><p style="width:220px;font-size:28px" data-ss-id="auto-p-yu4xt0">Out of work</p><div style="width:137px;height:44px;background:#2F6FDF;border-radius:6px"></div><p style="font-size:28px;font-weight:700" data-ss-id="auto-p-rqnprb">14</p></div>
+<div style="display:flex;align-items:center;gap:16px"><p style="width:220px;font-size:28px" data-ss-id="auto-p-hgnod0">Merge class</p><div style="width:98px;height:44px;background:#2F6FDF;border-radius:6px"></div><p style="font-size:28px;font-weight:700" data-ss-id="auto-p-9sy9r3">10</p></div>
+<div style="display:flex;align-items:center;gap:16px"><p style="width:220px;font-size:28px" data-ss-id="auto-p-e41rl2">Unclear rules</p><div style="width:78px;height:44px;background:#2F6FDF;border-radius:6px"></div><p style="font-size:28px;font-weight:700" data-ss-id="auto-p-xk3qx4">8</p></div>
+<div style="display:flex;align-items:center;gap:16px"><p style="width:220px;font-size:28px" data-ss-id="auto-p-flo38l">Blockers</p><div style="width:78px;height:44px;background:#2F6FDF;border-radius:6px"></div><p style="font-size:28px;font-weight:700" data-ss-id="auto-p-eoqebe">8</p></div>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-zy5w8z">Most scope rulings widen the story by one file, and it continues.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-10">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="stages" data-transition="fade" style="background:#EEF1F5;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-opz3tj">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-gi3vs2">Merging takes as long as building</h2>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-p7eqfa">Minutes per stage of a story, from board events for 257 stories. Dark bar: median. Light bar: 75th percentile.</p>
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;align-items:center;gap:24px"><p style="width:380px;font-size:32px;font-weight:700" data-ss-id="auto-p-o8jenx">Build</p><div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:16px"><div style="width:700px;height:36px;background:#1C2433;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-ciprix">14 median</p></div><div style="display:flex;align-items:center;gap:16px"><div style="width:1000px;height:36px;background:#9DB4D9;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-cgvwlw">20 p75</p></div></div></div>
+<div style="display:flex;align-items:center;gap:24px"><p style="width:380px;font-size:32px;font-weight:700" data-ss-id="auto-p-2rsmlw">Review</p><div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:16px"><div style="width:100px;height:36px;background:#1C2433;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-tdmk1p">2 median</p></div><div style="display:flex;align-items:center;gap:16px"><div style="width:200px;height:36px;background:#9DB4D9;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-ikji6i">4 p75</p></div></div></div>
+<div style="display:flex;align-items:center;gap:24px"><p style="width:380px;font-size:32px;font-weight:700" data-ss-id="auto-p-pwf5x2">Fix round</p><div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:16px"><div style="width:150px;height:36px;background:#1C2433;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-gcw50n">3 median</p></div><div style="display:flex;align-items:center;gap:16px"><div style="width:550px;height:36px;background:#9DB4D9;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-br5j59">11 p75</p></div></div></div>
+<div style="display:flex;align-items:center;gap:24px"><p style="width:380px;font-size:32px;font-weight:700;color:#D9772B" data-ss-id="auto-p-3yxjs8">Approved to merged</p><div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:16px"><div style="width:700px;height:36px;background:#D9772B;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-nnxawv">14 median</p></div><div style="display:flex;align-items:center;gap:16px"><div style="width:950px;height:36px;background:#EBC09E;border-radius:4px"></div><p style="font-size:24px" data-ss-id="auto-p-vyomb6">19 p75</p></div></div></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-11">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="statement" data-transition="fade" style="background:#1C2433;color:#FAF8F3;font-family:'Public Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px" data-ss-id="auto-section-0qwl2t">
+<div style="width:160px;height:8px;background:#D9772B"></div>
+<h1 style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#FAF8F3;width:1500px" data-ss-id="auto-h1-qvvrlr">The slowest stage is not writing code.</h1>
+<p style="font-size:44px;line-height:1.3;color:#C9D2DE;width:1400px" data-ss-id="auto-p-mgjb3r">Approval to merge takes as long as building. Optimize integration before adding agents.</p>
+
+</section>
+
+<section id="humanwaits" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-t3mepo">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-dfijdx">The one dangerous dependency: waiting for a person</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:32px 40px;border-radius:16px">
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#D9772B" data-ss-id="auto-p-79f1uq">5 h 12 min</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-vtu82i">22 Sep: one permission prompt in the CTO agent’s session halted the sprint cycle</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#EEF1F5;padding:32px 40px;border-radius:16px">
+<p style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#D9772B" data-ss-id="auto-p-ro02em">15:45 → 21:53</p>
+<p style="font-size:28px;line-height:1.4;color:#4A5568" data-ss-id="auto-p-ago13t">26 Oct: an open question dialog; no backlog committed, the team idle 17:00 to 22:00</p>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 48px">
+<p style="font-size:28px;line-height:1.4" data-ss-id="auto-p-q8p6k0"><b>Decide at planning.</b> A story needing approval carries the quoted decision.</p>
+<p style="font-size:28px;line-height:1.4" data-ss-id="auto-p-ys5yra"><b>The team never asks.</b> A missing decision spills the story over.</p>
+<p style="font-size:28px;line-height:1.4" data-ss-id="auto-p-cqiwe5"><b>Block only when it must.</b> The human is typing now, and the answer gates the next step.</p>
+<p style="font-size:28px;line-height:1.4" data-ss-id="auto-p-lkm9ja"><b>Pre-empt prompts.</b> Permissions granted ahead; hooks refuse with a reason.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-12">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="limits" data-transition="fade" style="background:#EEF1F5;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-tgge0g">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-wu84ll">What is still weak</h2>
+<table style="font-family:'Public Sans', Arial, sans-serif;font-size:28px;color:#1C2433" data-ss-id="auto-table-f42vt1">
+<tr style="background:#FAF8F3"><th style="width:32%;text-align:left">Problem</th><th style="width:68%;text-align:left">What we measured</th></tr>
+<tr><td>Retrospective follow-through</td><td>119 of 159 retrospective issues still open</td></tr>
+<tr><td>The merge tail</td><td>18% of stories end a sprint approved but unmerged</td></tr>
+<tr><td>Planning cost</td><td>Refinement and planning are not yet timed or costed</td></tr>
+<tr><td>Several teams at once</td><td>Designed, untested: the 7-day token budget funds one</td></tr>
+<tr><td>Sprint length</td><td>Two hours is a choice, not a finding; not yet compared</td></tr>
+<tr><td>Quality</td><td>Escaped defects not measured; about 1.7% of commits are reverts</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-13">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+<section id="start" data-transition="fade" style="background:#FAF8F3;color:#1C2433;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px" data-ss-id="auto-section-phd0u6">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1;color:#1C2433" data-ss-id="auto-h2-fpl9fb">Where to start: five pieces</h2>
+<ol style="font-size:32px;line-height:1.5;color:#1C2433;width:1500px">
+<li>A product-owner agent that talks with the human and plans</li>
+<li>A separate scrum-master agent that runs one sprint at a time</li>
+<li>Short-lived developer and reviewer agents</li>
+<li>A committed sprint backlog with a done condition per story</li>
+<li>A wrap trigger that lives outside the agents</li>
+</ol>
+<p style="font-size:28px;line-height:1.4;color:#4A5568;width:1500px" data-ss-id="auto-p-yp33s0">Add everything else only as observed failures justify it. Persistent agents help but are not required: a timer that starts a headless scrum-master session every two hours is enough to begin.</p>
+<div style="display:flex;gap:32px">
+<p style="font-size:28px;font-weight:700;color:#2F6FDF;background:#EEF1F5;padding:16px 28px;border-radius:12px" data-ss-id="auto-p-to17y1">daveremy.github.io/agent-scrum</p>
+<p style="font-size:28px;font-weight:700;color:#2F6FDF;background:#EEF1F5;padding:16px 28px;border-radius:12px" data-ss-id="auto-p-fu2m2n">github.com/daveremy/agent-scrum</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A5568" data-ss-id="auto-p-0ekfk6-14">Agent Scrum · Dave Remy · doi:10.5281/zenodo.23771171</p>
+
+</section>
+
+</div></div>
+<div id="credit">Made in collaboration with AI</div>
+<div id="nav"><button id="prev" aria-label="Previous slide">&#8592;</button><span id="count"></span><button id="next" aria-label="Next slide">&#8594;</button></div>
+<script>
+const s=[...document.querySelectorAll('#frame>section')];let i=0;
+function fit(){const f=document.getElementById('frame');const k=Math.min(innerWidth/1920,innerHeight/1080);f.style.transform='scale('+k+')';}
+function show(n){i=Math.max(0,Math.min(s.length-1,n));s.forEach((x,j)=>x.classList.toggle('on',j===i));document.getElementById('count').textContent=(i+1)+' / '+s.length;history.replaceState(null,'','#'+(i+1));}
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))show(i+1);if(['ArrowLeft','PageUp'].includes(e.key))show(i-1);});
+document.getElementById('prev').onclick=()=>show(i-1);document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('stage').onclick=e=>{show(e.clientX>innerWidth/2?i+1:i-1)};
+fit();show((parseInt(location.hash.slice(1))||1)-1);
+</script></body></html>

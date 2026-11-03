@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="How an engineer who already uses Claude Code can run always-on personal agents with Claude Code alone: nine named agents, eight months, one Linux server, no agent framework.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Persistent Agents on Claude Code">
+<meta property="og:description" content="How an engineer who already uses Claude Code can run always-on personal agents with Claude Code alone: nine named agents, eight months, one Linux server, no agent framework.">
+<meta property="og:url" content="https://lab.innerstacklabs.com/persistent-agents/">
+<meta property="og:image" content="https://lab.innerstacklabs.com/persistent-agents/og-cover.png">
+<meta property="og:image:width" content="1500">
+<meta property="og:image:height" content="785">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="author" content="Dave Remy">
+<title>Persistent Agents on Claude Code</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single-column working paper. Numbered sections because the paper is read in order; tables and figures as plates. */
+:root{
+  --bg:#f3f5f4;        /* paper, faint green-grey bias toward the accent */
+  --plate:#ffffff;
+  --ink:#18201d;
+  --ink-2:#4c5753;
+  --rule:#d3dad7;
+  --accent:#1d5f8a;    /* board blue: the radiator's column headers */
+  --done:#2f7a4f;      /* merged */
+  --warn:#9a6a12;      /* carried over, approved-not-merged */
+  --soft:#e4eae8;
+  --display:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121816;--plate:#1a2220;--ink:#e4ebe8;--ink-2:#a2afaa;--rule:#2d3a36;
+    --accent:#6fb0dc;--done:#6cc28f;--warn:#d9ac55;--soft:#22302c;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121816;--plate:#1a2220;--ink:#e4ebe8;--ink-2:#a2afaa;--rule:#2d3a36;
+  --accent:#6fb0dc;--done:#6cc28f;--warn:#d9ac55;--soft:#22302c;color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.62;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 72px;}
+article{max-width:690px;margin:0 auto;min-width:0}
+.disclose{font-family:var(--body);font-style:italic;font-size:.82rem;color:var(--ink-2);margin:2rem 0 0}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;font-weight:600;margin:0}
+h1{font-size:2.6rem;letter-spacing:-.01em;margin-bottom:.4rem}
+.subtitle{font-size:1.2rem;color:var(--ink-2);margin:0 0 1.2rem;font-style:italic}
+.byline{font-family:var(--ui);font-size:.78rem;color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.8rem}
+h2{font-size:1.5rem;margin-top:2.8rem;margin-bottom:.8rem}
+h2 .n{font-family:var(--ui);font-size:.95rem;color:var(--accent);font-weight:600;margin-right:.5rem;letter-spacing:.02em}
+h3{font-size:1.15rem;margin-top:1.8rem;margin-bottom:.5rem}
+p{margin:0 0 1rem}
+.abstract{background:var(--plate);border:1px solid var(--rule);border-radius:6px;padding:16px 20px;margin:0 0 1.6rem}
+.abstract .lbl,.kw .lbl{font-family:var(--ui);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;display:block;margin-bottom:.4rem}
+.abstract p{font-size:.98rem;margin:0}
+.kw{font-size:.9rem;color:var(--ink-2);margin:0 0 2rem}
+.kw .lbl{display:inline;margin-right:.4rem}
+code{font-family:var(--mono);font-size:.82em;background:var(--soft);padding:.05em .3em;border-radius:3px}
+ul,ol{padding-left:1.3rem;margin:0 0 1rem}
+li{margin-bottom:.4rem}
+strong{font-weight:600}
+dfn{font-style:normal;font-weight:600}
+.tw{overflow-x:auto;margin:1.2rem 0 .4rem;background:var(--plate);border:1px solid var(--rule);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-family:var(--ui);font-size:.86rem;line-height:1.45}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-2);font-size:.76rem;letter-spacing:.05em;text-transform:uppercase;background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tcap,figcaption{font-family:var(--ui);font-size:.84rem;color:var(--ink-2);margin:.5rem 0 1.6rem;line-height:1.5}
+figure{margin:1.6rem 0 0}
+.plate{background:var(--plate);border:1px solid var(--rule);border-radius:6px;padding:12px;overflow-x:auto}
+.plate svg{display:block;width:100%;height:auto;max-width:100%;min-width:560px}
+svg text{font-family:var(--ui);fill:var(--ink);font-size:13px}
+svg .dim{fill:var(--ink-2);font-size:11.5px}
+svg .box{fill:var(--plate);stroke:var(--rule);stroke-width:1.5}
+svg .hum{fill:var(--soft);stroke:var(--ink-2);stroke-width:1.5}
+svg .acc{fill:var(--plate);stroke:var(--accent);stroke-width:2}
+svg .dn{fill:var(--plate);stroke:var(--done);stroke-width:2}
+svg .dash{fill:none;stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:5 4}
+svg .ln{stroke:var(--ink-2);stroke-width:1.5;fill:none}
+svg .ta{fill:var(--accent);font-weight:600}
+svg .td{fill:var(--done);font-weight:600}
+svg .arrow{fill:var(--ink-2)}
+.ph{font-family:var(--ui);font-size:.88rem;color:var(--ink-2);background:var(--soft);border:1px dashed var(--ink-2);border-radius:6px;padding:28px 18px;text-align:center}
+.note{font-family:var(--ui);font-size:.86rem;color:var(--ink-2);border-left:3px solid var(--warn);padding:2px 0 2px 12px;margin:0 0 1rem}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.refs{font-size:.9rem}
+.refs li{margin-bottom:.5rem}
+.term{background:#101418;border-color:#2a3138;padding:14px}
+.termpre{margin:0;font-family:var(--mono);font-size:11px;line-height:1.35;color:#d6dde3;white-space:pre;background:none;border:0}
+.appx{background:var(--plate);border:1px solid var(--rule);border-radius:6px;padding:16px 20px;font-size:.95rem;margin:0 0 1rem}
+.appx .ah{font-family:var(--display);font-weight:600;font-size:1.2rem;margin:0 0 .2rem}
+.appx .am{font-family:var(--ui);font-size:.8rem;color:var(--ink-2);margin:0 0 1rem}
+svg .fillsoftbar{fill:var(--soft)}
+svg .barb{fill:var(--accent)}
+svg .barw{fill:var(--warn)}
+.radimg{display:block;width:100%;height:auto}
+@media print{
+  :root{--bg:#fff;--plate:#fff;--ink:#111;--ink-2:#444;--rule:#ccc;color-scheme:light}
+  body{font-size:10.5pt;padding:0;background:#fff}
+  article{max-width:none}
+  .pdflink{display:none}
+  h2{break-after:avoid} h3{break-after:avoid}
+  figure,.abstract,table{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+.pdflink{font-family:var(--ui);font-size:.85rem;margin:-1rem 0 1.6rem}
+</style>
+<link rel="stylesheet" href="/paper-latex.css">
+</head>
+<body>
+<nav class="labbar"><a href="/">← Inner Stack Labs · Lab</a><a class="deck" href="deck/">View the deck →</a></nav>
+<article>
+
+<h1>Persistent Agents on Claude Code</h1>
+<p class="subtitle">If you already use Claude Code, you can run your own always-on personal agents with it. Why, what and how, from nine agents in daily use for eight months</p>
+<p class="byline">Dave Remy · Working note · 30 October 2026, version 1.2 · CC BY 4.0 · <a href="https://doi.org/10.5281/zenodo.23787645">doi:10.5281/zenodo.23787645</a></p>
+<p class="pdflink"><a href="persistent-agents.pdf">PDF</a> · <a href="https://github.com/daveremy/persistent-agents">Repository and feedback</a></p>
+<p class="byline"><em>Updated 30 October 2026 (version 1.2): Claude Code Projects added to the comparison (section 9). Version 1.1: in-session scheduled tasks now survive a resumed session, and Claude Code's newer scheduling options are covered (section 4.4).</em></p>
+
+<div class="abstract">
+<span class="lbl">Abstract</span>
+<p>In the second half of 2026, xAI, Meta and Anthropic each released an always-on personal agent: Grok Bot, Muse and Claude Duet. This note argues that an engineer who already uses Claude Code can build the same kind of system with Claude Code alone, and explains why, what and how from one that has run for eight months. Since March 2026, Claude Code sessions have run continuously as named agents for one person's life and work; there have been nine since May, and since August they have run on a dedicated Linux server. They are a chief of staff, and agents for health, finance, communications, engineering, operations, customer support, research and marketing. Each agent is an ordinary <code>claude --agent</code> session in a tmux window, kept alive by systemd, reachable through its own Telegram bot, and defined by a markdown file in a git repository. No agent framework sits between the person and Claude Code. The cost of that choice is the infrastructure we had to add ourselves: session continuity across restarts, scheduled jobs, routing between agents, presence detection, budget control and safety gates. As of 28 October 2026 the repository had 3,761 commits. This note describes each agent, the infrastructure, the failures that shaped it, the use of Telegram and remote work, and how it compares with the hosted persistent agents released in the second half of 2026 (Grok Bot, Meta's Muse, Anthropic's Claude Duet). We do not yet know where this setup and Claude Duet will overlap.</p>
+</div>
+<p class="kw"><span class="lbl">Keywords</span>persistent agents, Claude Code, multi-agent systems, OpenClaw, personal automation, always-on agents</p>
+
+<h2><span class="n">1</span>Why build it</h2>
+
+<p>Persistent personal agents (also called always-on agents or personal AI agents) became a category in early 2026 with OpenClaw, an open-source project that runs on your own machine and uses messaging apps as its interface. By October 2026 several descendants exist, most of them hosted. Someone deciding how to run persistent agents can now choose between a hosted product, an open-source framework, and building on a coding agent they already use. This note describes the third option, as I have run it for eight months, and compares it with the other two.</p>
+
+<p>I started with OpenClaw in early 2026. Following common advice at the time, I bought a Mac mini to run it on a dedicated machine, and I gave the assistant its own identity, with a separate name, Gmail account and GitHub account. Three problems ended that setup:</p>
+<ul>
+<li><strong>The separate identity.</strong> Running the assistant as a different person meant parallel accounts, credentials and permissions that had to be kept in step with my own. It added work without adding value.</li>
+<li><strong>Terms of service.</strong> Anthropic's terms for using Claude through OpenClaw kept changing, so the foundation of the setup was not stable.</li>
+<li><strong>Time.</strong> I still needed Claude Code on the side for real work. I was spending most of my time on OpenClaw itself and getting little value from it, and I had work to do.</li>
+</ul>
+<p>I started LifeOS as a Claude Code project on 26 February 2026 and shut down the OpenClaw gateway the next day. The Mac mini stayed. It had been bought to host an agent; it turned out to be useful as a machine that never sleeps, which is what a tmux server needs. On 24 March 2026 the agents became persistent sessions on it.</p>
+
+<p>The main finding of this note is that, for an engineer who already uses Claude Code, this kind of system does not need a dedicated product or framework. Claude Code, a terminal multiplexer and the operating system's service manager are enough to run a fleet of persistent agents. For most people a hosted product is the better choice (section 9); this note is written for readers who already live in Claude Code and want their agents there too. The rest of the note covers why I built it this way (this section), what the agents do (section 3), how they are built and what we had to add (sections 4 and 5), what failed (section 8), and how the result compares with the hosted products (section 9).</p>
+
+<h2><span class="n">2</span>Hardware</h2>
+
+<p>The setup has moved once. In August 2026 the agents moved from the Mac mini to a dedicated Linux server (32 GB of memory, 16 threads), which we call the hub. The Mac mini now has two narrow jobs: it is the bridge to the Apple ecosystem, because iMessage and Contacts are only readable on a Mac with Full Disk Access, and it is a build runner. The hub runs everything else. Two laptops and a phone are clients (section 7).</p>
+
+<h2><span class="n">3</span>The agents</h2>
+
+<p>Each agent has one domain and one Telegram bot. Seven run Opus 5.5; the two whose work is routing and monitoring run Sonnet, which is enough for that work.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Agent</th><th>Role</th><th>What it does</th><th>Model</th></tr></thead>
+<tbody>
+<tr><td>Marcus</td><td>Chief of staff</td><td>Default conversational agent; routes and records every cross-domain message between agents</td><td>Sonnet</td></tr>
+<tr><td>Huberman</td><td>Health</td><td>Logs meals, workouts, sleep and labs; training plans</td><td>Opus</td></tr>
+<tr><td>Buffett</td><td>Finance</td><td>Transactions, budgets, subscriptions, a small brokerage account under explicit approval</td><td>Opus</td></tr>
+<tr><td>Franklin</td><td>Communications</td><td>Email triage, drafts, iMessage review, contacts; never sends without approval</td><td>Opus</td></tr>
+<tr><td>Karpathy</td><td>CTO</td><td>Plans and runs software work across my projects, including the sprint method described in <a href="https://lab.innerstacklabs.com/agent-scrum/">Agent Scrum</a></td><td>Opus</td></tr>
+<tr><td>Moss</td><td>Operations</td><td>Watches the hub, its services and its scheduled jobs</td><td>Sonnet</td></tr>
+<tr><td>Will</td><td>Customer support</td><td>Support and feedback for my app, Neuralingual</td><td>Opus</td></tr>
+<tr><td>Sagan</td><td>Research</td><td>On-demand research; a twice-weekly AI news scan</td><td>Opus</td></tr>
+<tr><td>Fish</td><td>Marketing</td><td>Content and distribution for Neuralingual</td><td>Opus</td></tr>
+</tbody>
+</table></div>
+<p class="cap">Table 1. The nine persistent agents, October 2026.</p>
+
+<p>The agents share two kinds of state: an Obsidian vault (daily notes, projects, reference material), and the git repository that holds their definitions, skills and scripts. Short-lived workers, such as developer agents in a sprint or a scheduled scan, are started on demand and are not counted among the nine.</p>
+
+<p>The sections below describe each agent: what it does, what it connects to, what runs on a schedule in its name, and what it may never do without my approval. Job counts come from the job manifest (section 4.4) as of 28 October 2026.</p>
+
+<h3>3.1 Marcus: chief of staff</h3>
+<p>Marcus is the default agent and the router. Every message between agents that crosses a domain passes through it, and it records each one in the day's signals file before forwarding it. It also checks the tickler store each morning and routes due reminders to the agent that set them. It deliberately holds few tools: anything specialised goes to the agent that owns the domain. It runs Sonnet, which is enough for routing. Two scheduled jobs: the morning tickler routing and an hourly sweep that delivers signals appended to the file when it could not be reached.</p>
+
+<h3>3.2 Huberman: health and fitness</h3>
+<p>Huberman logs meals, workouts, sleep, weight and supplements to IronCompass, my health tracker, from whatever I say in conversation. It reconciles workouts that arrive from Apple Health, pulls Oura sleep data each morning, checks training against the plan in intervals.icu, and reads lab results from Function Health. Its MCP servers include IronCompass, Strava, Peloton and intervals.icu. Twelve scheduled jobs: four Apple Health reconciliations a day, the Oura pull, supplement and collagen reminders sent to Telegram, pickleball reminders, an hourly staleness check on the health data series, and a Sunday weekly summary. One of its rules: never quote a training-compliance figure without saying how many workouts could not be matched to the plan.</p>
+
+<h3>3.3 Buffett: finance</h3>
+<p>Buffett pulls bank transactions through Plaid, categorises them in Lunch Money, writes a daily financial summary and a weekly net-worth figure, and keeps a register of allowed subscriptions, so a recurring charge not on it is a finding. It also manages a small retirement brokerage account, where every order is a separate ticket I approve in the terminal; no timer or subagent ever trades. Eleven scheduled jobs: four transaction syncs and five alert scans a day, the daily summary and the Friday net-worth figure. Bulk transaction updates and every delete need my confirmation, and a hook enforces that. The alert scan sends me transactions over $500 directly, at most three times a day.</p>
+
+<h3>3.4 Franklin: communications</h3>
+<p>Franklin triages email into action, information and promotions, digests newsletters, reviews iMessages, prepares calendar briefs morning and evening, and keeps contacts in step across Obsidian, Apple Contacts and Google Contacts. Email and calendar go through Google's <code>gws</code> command-line tool; iMessage goes through the bridge on the Mac mini. Thirteen scheduled jobs: five email triages and four iMessage reviews a day, two calendar briefs, a newsletter digest and a nightly contacts check. Its first rule is that no email or text goes out without my approval. Archiving, creating contacts and deleting anything are also approval-gated. Since 27 October I can approve a drafted email by tapping a button in Telegram.</p>
+
+<h3>3.5 Karpathy: CTO</h3>
+<p>Karpathy owns software work across my projects: Neuralingual (my app), a ClubExpress automation, and smaller tools. It keeps the backlog, plans two-hour sprints, and hands each sprint to a scrum-team agent that starts short-lived developer and reviewer agents (the method is described in <a href="https://lab.innerstacklabs.com/agent-scrum/">Agent Scrum</a>). It merges pull requests within the rules the method sets. Reviews use other models as well as Claude: OpenAI's Codex and xAI's Grok through their command-line tools. Three scheduled jobs: a nightly CI sweep, a weekly check that keeps a spare Claude login fresh, and weekly release notes. It needs my per-action approval to deploy Neuralingual to production or change production data. Engineering and operations problems from other agents go to Karpathy first; I hear about them only when my judgement is needed.</p>
+
+<h3>3.6 Moss: operations</h3>
+<p>Moss watches the hub: the agent sessions, MCP servers, command-line tool versions, browser logins, disk and memory, Sentry errors, and the app's uptime. It owns most of the scheduled checks, 138 of the 227 rows in the job manifest, including an hourly check of the app's language-model API keys and an uptime probe every two minutes. It runs Sonnet. It never deploys to production, never edits application code, and needs my approval for major version upgrades and new infrastructure.</p>
+
+<h3>3.7 Will: customer support</h3>
+<p>Will handles support for Neuralingual. Its strategy is to answer well and never reach out: it responds to users who contact us, tracks feedback in a CRM, compiles a daily activity pulse, and drafts responses to low ratings. Six scheduled jobs: the morning pulse, an evening support check and a Monday retention report, each with a separate gathering step. It never sends anything to a user without my approval, and that rule is permanent. Its own rule about evidence: never report a zero you did not measure.</p>
+
+<h3>3.8 Sagan: research</h3>
+<p>Sagan does research on request: resolving X links, searching X and the web, reading documentation, and writing reports with sources, all logged to a research index. A scheduled scan of AI news runs on Monday and Thursday mornings and escalates findings that matter to the other agents. Its other scheduled jobs write sports highlight digests, refresh research on open questions, and watch rental listings. Since late October it is also meant to read, once a week, the notes other agents tag as worth sharing, drafts posts in my voice, and puts them in Typefully as drafts that publish only when I confirm them. Ten scheduled jobs in all. It never posts, publishes, signs up for anything or spends money.</p>
+
+<h3>3.9 Fish: marketing</h3>
+<p>Fish runs marketing for Neuralingual: the content pipeline from draft to review to scheduled post, launch preparation, a weekly look at competitors, and curation of posts worth quoting. It works through Typefully for X and LinkedIn, Buttondown for email, and image and slide tools. Ten scheduled jobs: curation scans and publishes three days a week, an amplification check, a daily summary and twice-weekly progress reports. It needs my approval to publish anything, create accounts, contact anyone or spend on ads. One failure shaped it: in August its publish step reported success while the Typefully API was refusing every request and nothing had posted, so finding candidates and publishing are now separate jobs, and a publish counts only when the post can be read back.</p>
+
+
+<h2><span class="n">4</span>Infrastructure</h2>
+
+<p>Everything runs on Claude Code. No agent framework sits between me and the sessions. This section describes the layers from the machine up.</p>
+
+<h3>4.1 The tmux session</h3>
+<p>All nine agents live in one tmux session, <code>lifeos-agents</code>, with one window per agent and one pane per window. The window order follows how often I talk to each agent (huberman, franklin, buffett, karpathy, fish, will, sagan, moss, marcus), so the agents I use most sit on the first number keys. Each window has its own colour in the status bar, so I can see which agent I am in at a glance, including on a phone screen. I attach with <code>tmux attach -t lifeos-agents</code> and switch with Ctrl-B and a number.</p>
+<p>tmux does three jobs here. It keeps each session alive with no terminal attached. It lets me attach from any device and find every agent where I left it. And it gives scripts a stable address for each agent (session, window, pane), which the launcher and the watchdog use to check and restart one agent without touching the others.</p>
+
+<h3>4.2 Start, restart and recovery</h3>
+<p>Four layers keep the agents running:</p>
+<ol>
+<li><strong>systemd.</strong> A user service, <code>lifeos-agents.service</code>, creates the tmux session at boot. Restarting the whole hub goes through systemd, never through a script run from inside a pane, because a pane that restarts the session kills itself halfway through.</li>
+<li><strong>The launcher</strong> (<code>lifeos-agents.sh</code>) opens one window per agent, a few seconds apart. The stagger matters: every session shares one login token, and nine sessions refreshing it at once caused a race that logged sessions out.</li>
+<li><strong>The wrapper</strong> (<code>agent-wrapper.sh</code>) runs inside each window. It is a restart loop around <code>claude --agent &lt;name&gt;</code>. On each launch it resolves the agent's model from a budget state file, resumes the agent's pinned session ID, attaches that agent's Telegram bot, and sets the time zone. The hub's clock is UTC; every schedule was written in Arizona time, and the first day on Linux showed that a reminder meant for 07:26 would have fired at 00:26. On each launch, the wrapper passes <code>/initagent</code> as the session's first prompt, so the agent re-reads its definition.</li>
+<li><strong>The watchdog</strong> (<code>agent-watchdog.sh</code>) runs every five minutes from a systemd timer. It checks each window separately and restarts only the dead ones, so one crash does not cost the other eight their context. It exists because in July 2026, on the Mac mini, the whole hub went down twice for about eight days each time (2 to 10 July and 13 to 21 July) and nothing brought it back.</li>
+</ol>
+
+<h3>4.3 Definitions, skills, hooks and MCP servers</h3>
+<p>Each agent is a markdown file in <code>.claude/agents/</code>: its role, voice, rules, the canon documents it must read at start-up, and what it may never do without approval. A shared <code>CLAUDE.md</code> holds the rules for every agent: how to message each other, the approval levels, channel rules and writing style. Both are in git, and an agent may edit them without asking first, provided each edit is its own commit with a marker that a script uses to list a one-line revert for me.</p>
+<p>The repository holds 44 skills (procedures any agent can run, such as logging a meal, triaging email or filing an issue) and 29 hooks. Hooks run before and after tool calls; they are the strongest rules we have, because they apply whether or not the model remembers them. They block outbound email and iMessage without my approval, block production database changes, keep a scheduled job to the tools it declared, stop an agent from spawning new work while it drains for a restart, and log every tool call to an audit file with credentials removed. MCP servers are scoped per agent: each agent gets a small configuration file, so the finance agent has the finance tools and the research agent has search tools, and neither carries the other's.</p>
+
+<h3>4.4 Scheduled work</h3>
+<p>Claude Code's own scheduled tasks live inside a session. When we moved scheduled work out of the sessions, they vanished when a session restarted. That is no longer true: on Claude Code 2.1.314, a recurring task survived an exit and a resume with the same session ID and fired twice afterwards (one trial, 30 October 2026). They still expire after seven days, and a run that falls due while the session is down is not made up, so they remain unreliable for anything that has to happen on a given day. Scheduled work runs outside the sessions:</p>
+<ul>
+<li>A manifest, <code>config/jobs.tsv</code> (227 jobs), lists every scheduled job: owner, schedule, command. A script builds systemd timers from it and checks that nothing scheduled is missing from the manifest. The hub runs 190 user timers.</li>
+<li>Jobs that need judgement run through <code>dispatch.sh</code>, which starts a headless <code>claude -p</code> session for one job, with the model, tools and MCP servers named in that job's file (33 such files), and judges the run by its deliverable (the file or message it was meant to produce), not by its exit code. Such a job may escalate a finding to the agent that owns the domain.</li>
+<li>Jobs that need no judgement (a data sync, a health check) are plain scripts.</li>
+<li>Every job writes a row to a ledger, a monthly JSON-lines file, with what it checked and what it found. Without the ledger, a job that ran and found nothing looked the same as a job that never ran. In August that confusion caused a fleet-wide alarm, four agents changing their configuration and a retraction, in three hours.</li>
+</ul>
+<p>Claude Code now also offers cloud scheduled tasks, which run on Anthropic's infrastructure on a schedule, an API call or a GitHub event, and Desktop scheduled tasks, which run on your own machine. A cloud task starts from a fresh clone, runs at most hourly and can use only claude.ai connectors, so it cannot replace a job that reads the hub's data. Jobs that need only a GitHub repository could move to cloud tasks; we have not tried that yet.</p>
+
+<h3>4.5 Messages between agents</h3>
+<p>Agents talk to each other with Claude Code's SendMessage. Two kinds of traffic are kept apart. Routine questions go directly from one agent to another. Anything that crosses domains, or needs a record, goes to the chief-of-staff agent, which writes it to a daily signals file and forwards it. Each such message carries an ID minted by the sender, so a retry is recognised and not delivered twice. If the router cannot be reached, the sender appends the same line to the signals file, and an hourly sweep delivers it.</p>
+
+<h3>4.6 Memory</h3>
+<p>Agents keep state in five places, each for one kind of fact:</p>
+<div class="tw"><table>
+<thead><tr><th>Store</th><th>What it holds</th></tr></thead>
+<tbody>
+<tr><td>Agent definitions and <code>CLAUDE.md</code></td><td>Identity and protocol: who each agent is and the rules all of them follow</td></tr>
+<tr><td>Obsidian vault</td><td>Durable knowledge: projects, people, reference notes, research reports. Each agent writes its own section of the day's daily note</td></tr>
+<tr><td>Claude Code auto-memory</td><td>Lessons learned across sessions: an index file read at start-up, plus about 20 topic files, including patterns files for four of the agents</td></tr>
+<tr><td>Handoff documents</td><td>One per agent: the state of in-flight work, written before a restart and adopted after it</td></tr>
+<tr><td>Git, signals files, ledger, ticklers</td><td>Events, append-only: what happened, what was sent, what ran, what is due</td></tr>
+</tbody>
+</table></div>
+<p class="cap">Table 2. Where the agents keep state.</p>
+<p>The vault syncs to my devices through Obsidian Sync. The hub runs the headless Obsidian client as a sync peer, and the vault also has its own git history on the hub.</p>
+
+<h3>4.7 Models and budget</h3>
+<p>The wrapper reads a budget state file, <code>NORMAL</code>, <code>CONSERVE</code> or <code>EXHAUSTED</code>, at every launch. In the first two states the seven Opus agents run Opus 5.5; in the third they run Sonnet. One file write moves the whole fleet, and a second script switches running sessions without a restart. The status line in every pane shows the latest five-hour and seven-day rate-limit readings, shared between panes so a quiet pane does not show a stale value. Heavy coding is handed to OpenAI's Codex as a subagent, which draws on two ChatGPT Plus allowances rather than on Claude's. Since 25 October, sprint stories that need none of my machines or personal data, only a GitHub repository, have also run as Claude Code cloud sessions, 19 of them on the first day, funded by a cloud-credit grant that expires on 5 November. So a story can be built in a hub pane, by Codex, or in Anthropic's cloud, depending on what it needs and which capacity is free.</p>
+
+<h3>4.8 Other machines and services</h3>
+<ul>
+<li><strong>Tailscale</strong> connects the hub, the Mac mini, both laptops, the phone and the iPad.</li>
+<li><strong>The Mac mini</strong> runs a small HTTP bridge to iMessage and Contacts, which only a Mac can read. Apple Health data reaches the hub from the phone through a receiver service.</li>
+<li><strong>A shared browser.</strong> One Chrome runs on the hub under systemd with a persistent profile. I sign in to a site once, from my laptop over Tailscale, and agents attach to that browser through the Chrome DevTools MCP server. A login-check script tests whether each of about 30 registered sites is still signed in.</li>
+<li><strong>Secrets.</strong> No API keys or tokens are kept in files in the repository; its <code>.env</code> file holds only comments. At launch, the wrapper reads each key from 1Password through a read-only service account and places it in that agent's process environment, so it exists only in memory. Most keys go to every agent; the most privileged one, the health database key, goes to the health agent alone. Agents can use these keys but should never display them, and a hook refuses any command that would print the whole environment, so a key cannot reach a transcript that way by accident. Apart from login tokens that the tools themselves keep, the 1Password service-account tokens are the only credentials stored on disk, in files only my user can read. My personal passwords live in a separate password manager that no agent can reach; agents use websites through the shared browser's signed-in sessions instead.</li>
+<li><strong>CI</strong> runs on self-hosted GitHub Actions runners on the hub and two other Linux machines.</li>
+</ul>
+
+<h2><span class="n">5</span>What we had to add</h2>
+
+<p>Claude Code is built for a person at a terminal. Running nine sessions continuously exposed problems that a single interactive session does not have. Table 3 summarises the main ones and what we built for each; section 4 describes them in more detail.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Problem</th><th>What we added</th></tr></thead>
+<tbody>
+<tr><td>A restart or a cleared context loses the agent's working state</td><td>A handoff document per agent, written before a restart and adopted after it; a drain step that stops new subagents before a handoff; session IDs pinned in the wrapper</td></tr>
+<tr><td>In-session scheduled tasks expire after seven days (and, until recently, died with the session)</td><td>A job manifest (227 jobs) compiled to systemd timers; scheduled work runs as short headless Claude Code jobs, each declaring the tools it may use</td></tr>
+<tr><td>Nine agents messaging each other with no record</td><td>All cross-domain messages go through the chief-of-staff agent, which records them in a daily signals file; each message carries an ID so retries are not delivered twice</td></tr>
+<tr><td>A job that ran and found nothing looks the same as a job that never ran</td><td>A ledger: every scheduled job writes a row with what it checked and what it found</td></tr>
+<tr><td>Notifications on my phone while I am at the terminal</td><td>A presence check that measures keyboard activity on attached tmux clients</td></tr>
+<tr><td>Rate limits shared by nine sessions</td><td>A budget state file that moves the whole fleet between models at the next launch; a status line that shares the latest rate-limit reading between sessions</td></tr>
+<tr><td>All sessions share one login token</td><td>Staggered startup to avoid a token-refresh race; a scripted procedure for switching accounts that does not lose sessions</td></tr>
+<tr><td>Agents with real access to email, money and messages</td><td>Hooks that block outbound sends; per-agent permission denials; a written list of actions that always require my approval</td></tr>
+</tbody>
+</table></div>
+<p class="cap">Table 3. Problems that persistence exposed, and the additions that address them.</p>
+
+<p>One small addition has been more useful than its size suggests: <a href="https://github.com/daveremy/tickler-mcp">tickler-mcp</a>, an MCP server I wrote in March 2026. A session cannot hold an intention past its own end, so an agent that wants to check something in three days has nowhere to put it. A tickler is that place: a reminder with a due time, stored outside every session, which agents create, snooze and complete through MCP tools. Scheduled jobs route due ticklers back to the agent that set them, or to my Telegram. Since the store moved to the hub on 20 August 2026, the agents have created 224 ticklers (37 still pending, 13 recurring), more than half of them by the finance and engineering agents. We could probably use it more.</p>
+
+<p>These additions are the main cost of the approach, and it is a large one. Building and maintaining this system has taken more of my development time than any one of my major projects, though less than all of them together. Since 26 February 2026 the repository has taken 3,761 commits, close to my app Neuralingual (3,879) and at least eight times as many as any other project.Much of that work went into the additions above, and by October 2026 the repository held 434 bash files with about 91,000 lines. Shell scripts were the fastest way to add each piece, and they became the most expensive part to maintain: changes to the gates and parsers averaged three review rounds, mostly on shell hazards. In October we stopped writing new shell scripts and began moving tooling to TypeScript.</p>
+
+<p>Hosted persistent agents include several of these additions by default (section 9).</p>
+
+<h2><span class="n">6</span>Telegram</h2>
+
+<p>Telegram is the asynchronous interface. Each of the nine agents has its own bot, so a conversation with the finance agent is a separate chat from a conversation with the health agent, and the chat list shows which agent said what. Three rules came out of use:</p>
+<ul>
+<li><strong>Reply in the channel the message came from.</strong> A question asked in the terminal is answered in the terminal, and a question asked on Telegram is answered on Telegram. I found a reply that switched channels in the middle of a conversation more disruptive than a slow one.</li>
+<li><strong>Alerts always go to Telegram.</strong> Anything an agent or job sends on its own (a digest, a watch result, a failure) goes to Telegram, whether or not I am at the terminal.</li>
+<li><strong>One poller per bot.</strong> When we briefly ran a second session per agent, two processes polling one bot token caused conflicts. Secondary instances could send through a script but never receive.</li>
+</ul>
+<p>There are no quiet hours. Agents work at any hour, and my phone's Do Not Disturb setting decides whether a message interrupts me.</p>
+
+<h2><span class="n">7</span>Working remotely</h2>
+
+<p>I never work at the hub itself. It has no desk, keyboard or monitor; it sits on the far side of my office, wired to the router. I reach it in four ways:</p>
+<ul>
+<li><strong>Terminal:</strong> ssh over Tailscale from a MacBook Pro or a Dell laptop, attached to the tmux session, switching between agents by window.</li>
+<li><strong>Phone and tablet:</strong> the Moshi terminal app on iPhone and iPad, for the same tmux session when I am away from a laptop.</li>
+<li><strong>Telegram:</strong> for short asynchronous requests and for alerts.</li>
+<li><strong>Artifacts:</strong> anything longer than a few paragraphs is published as a private Claude Artifact, so I can read it on any device instead of in a terminal.</li>
+</ul>
+<p>Moshi and Telegram together make the phone a working client, and an iPad with a keyboard a complete one. The Claude Code desktop app might do better still, with remote sessions and a better surface for reading. I have not adopted it yet.</p>
+
+<h2><span class="n">8</span>What went wrong</h2>
+
+<p>Most of the infrastructure in section 4 exists because something failed. Table 4 lists the failures that changed the design.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Date (2026)</th><th>What happened</th><th>What changed</th></tr></thead>
+<tbody>
+<tr><td>2–10 July and 13–21 July</td><td>The tmux session on the Mac mini died and nothing restarted it. Telegram, email and the marketing schedule were down for about eight days each time.</td><td>A watchdog that checks each agent window every five minutes and restarts only the dead ones</td></tr>
+<tr><td>12 August</td><td>Two agents running Haiku answered messages from other agents by writing the reply into their own pane. The replies reached no one, and nothing reported an error.</td><td>No Haiku anywhere in the fleet</td></tr>
+<tr><td>14 August</td><td>A scheduler guard correctly skipped a run and said nothing. It was read as a scheduler failure, which caused a fleet-wide alarm, configuration changes by four agents, and a retraction, all within three hours.</td><td>The ledger: every job writes what it checked and what it found</td></tr>
+<tr><td>19 August</td><td>On the first day on Linux, a reminder scheduled for 07:26 would have fired at 00:26: the hub's clock is UTC and every schedule was written in Arizona time.</td><td>The wrapper sets the time zone for every agent</td></tr>
+<tr><td>21 August</td><td>The marketing agent's publish step reported success while the Typefully API refused every request.</td><td>A publish counts only when the post can be read back</td></tr>
+<tr><td>29–30 August</td><td>Logging out in one pane to switch Claude accounts logged out all nine, because they share one token.</td><td>A scripted account switch that records every session ID first</td></tr>
+<tr><td>9 September</td><td>An agent restarted the whole hub during a conversation, without warning.</td><td>A hub restart needs the CTO agent's agreement and a one-line notice to me first</td></tr>
+<tr><td>20 October</td><td>Changes to gates and parsers averaged three review rounds, mostly on shell-script hazards, across 434 bash files.</td><td>No new shell scripts; new tooling is written in TypeScript</td></tr>
+</tbody>
+</table></div>
+<p class="cap">Table 4. Failures that changed the design.</p>
+
+<p>A pattern runs through the list: most of these failures were silent. A reply that reached no one, a job that skipped without a trace and a publish that reported success all looked the same as normal operation. Much of the infrastructure exists to make silent failures visible.</p>
+
+<h2><span class="n">9</span>Comparison with hosted persistent agents</h2>
+
+<p>Several hosted persistent agents appeared in the second half of 2026. Table 5 compares them with this setup on the points that mattered most to us. Details for the hosted products come from their documentation and press coverage as of October 2026; Claude Duet is a research preview and Projects is a public beta, so their details may change.</p>
+
+<div class="tw"><table style="font-size:.76rem">
+<thead><tr><th></th><th>This setup</th><th>OpenClaw</th><th>Grok Bot (xAI)</th><th>Muse (Meta)</th><th>Claude Duet (Anthropic)</th><th>Claude Code Projects (Anthropic)</th></tr></thead>
+<tbody>
+<tr><td>Released</td><td>March 2026 (private)</td><td>January 2026</td><td>August 2026, beta</td><td>September 2026</td><td>October 2026, research preview</td><td>September 2026, public beta</td></tr>
+<tr><td>Where it runs</td><td>My Linux server</td><td>Your machine</td><td>One cloud VM per user</td><td>One cloud VM per user</td><td>One cloud VM per user</td><td>Cloud sessions, or your machine through Remote Control</td></tr>
+<tr><td>Agents</td><td>Nine independent sessions, each with its own definition and permissions</td><td>One assistant with skills</td><td>Several named bots sharing one VM, files and browser</td><td>One agent</td><td>One agent</td><td>A coordinator that starts a worker per task, with shared memory</td></tr>
+<tr><td>How it runs on its own</td><td>systemd timers and headless jobs</td><td>Heartbeat and schedules</td><td>Routines on schedules or events</td><td>Long-running tasks</td><td>Polls connected accounts every few hours</td><td>Workers continue after you leave; scheduled tasks</td></tr>
+<tr><td>Approval for sends, payments, deletion</td><td>Hooks and written rules, maintained by us</td><td>Depends on configuration</td><td>Built in</td><td>Built in</td><td>Built in</td><td>Auto mode; repository hooks not applied in the cloud</td></tr>
+<tr><td>Who maintains it</td><td>Me and the agents</td><td>Me</td><td>xAI and Cursor</td><td>Meta</td><td>Anthropic</td><td>Anthropic</td></tr>
+<tr><td>Can change its own code</td><td>Yes, through git</td><td>Its skills are editable files</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+</tbody>
+</table></div>
+<p class="cap">Table 5. This setup compared with OpenClaw, three hosted persistent agents and Claude Code Projects, October 2026.</p>
+
+<p>The hosted products remove most of sections 4 and 5: no server, no restart handling, no scheduler and no token races. That is a large saving, and for most people it is the better choice. What they do not offer is the integration. In this setup the agents that manage my email and finances run on the same tool, in the same repository, as the agents that write and ship my software. The research agent can file an issue that the engineering agent plans into a sprint the same day. When a gate fails, the fix is a commit that I can read and revert. None of the hosted products let a user change the agent's own machinery that way. The two approaches already meet in one place: self-contained development work runs in Anthropic's cloud sessions (section 4.7), while everything that needs my machines or my data stays on the hub.</p>
+
+<p>Claude Code Projects is not a personal agent, but it is the closest hosted match to the engineering side of this setup. You give one coordinating conversation a goal, and it starts worker sessions in parallel, each on its own branch, sharing the project’s instructions and memory; the work continues after you close the laptop and can be steered from a phone. Its cloud threads load a repository’s <code>CLAUDE.md</code> but not its skills, hooks, permission rules or MCP configuration, so the gates this setup depends on would not run there. A thread can instead run on your own machine through Remote Control, where they do. Projects draws on the same plan limits as other Claude Code sessions and, by its own documentation, uses them faster, so it would not ease the weekly limit that constrains us. We have not tried it.</p>
+
+<p>I am ready to adopt a hosted approach for any part where it does the job better, and the parts most likely to move are the ones where the hosted product has an advantage we cannot match: its own cloud machine with a persistent browser, and connectors we would otherwise build. Claude Duet is the closest match, because it uses the same models and the same subscription. I do not yet know whether it will replace parts of this setup, run beside it, or eventually merge with it.</p>
+
+<h2><span class="n">10</span>What is open</h2>
+<ul>
+<li><strong>Maintenance.</strong> The additions in sections 4 and 5 are real software that has to be maintained. We have not measured how much of each week goes into the infrastructure rather than the work it supports.</li>
+<li><strong>Overlap with Claude Duet.</strong> Untested. Duet is waitlisted, and we have not run it beside this setup.</li>
+<li><strong>Single points of failure.</strong> One server, one login token shared by every session, and one person who can approve gated actions.</li>
+<li><strong>Remote use.</strong> The Claude Code desktop app is not yet part of the setup.</li>
+<li><strong>Claude Code Projects.</strong> Not tried. Its cloud threads skip the hooks and skills this setup relies on.</li>
+<li><strong>Cloud scheduled tasks.</strong> Not yet tried for the jobs that need only a GitHub repository.</li>
+</ul>
+
+<p class="disclose"><em>Created in collaboration with AI.</em></p>
+</article>
+
+
+</body>
+</html>

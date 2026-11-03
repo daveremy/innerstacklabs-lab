@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Persistent Agents: the deck</title>
+<meta name="description" content="Persistent Agents on Claude Code in 16 slides: nine named agents, eight months, one Linux server, no agent framework.">
+<meta property="og:title" content="Persistent Agents: the deck">
+<meta property="og:description" content="Persistent Agents on Claude Code in 16 slides.">
+<meta property="og:image" content="https://lab.innerstacklabs.com/persistent-agents/og-cover.png">
+<style>
+html,body{margin:0;height:100%;background:#0f1412;color:#e8e6e1;font:15px/1.4 system-ui,sans-serif}
+#stage{position:fixed;inset:0 0 56px 0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+canvas{max-width:96vw;max-height:calc(100vh - 80px);box-shadow:0 8px 40px rgba(0,0,0,.5);background:#fff}
+#bar{position:fixed;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;justify-content:center;gap:16px}
+button,a.btn{background:#1d2622;color:#e8e6e1;border:1px solid #2e3a35;border-radius:6px;padding:8px 14px;font:inherit;cursor:pointer;text-decoration:none}
+button:hover,a.btn:hover{background:#26322d}
+#count{min-width:64px;text-align:center;color:#a8b0ac}
+#home{position:fixed;top:12px;left:16px;color:#a8b0ac;text-decoration:none;font-size:14px}
+#home:hover{color:#fff}
+#msg{color:#a8b0ac}
+</style></head>
+<body>
+<a id="home" href="/">← Inner Stack Labs · Lab</a>
+<div id="stage"><span id="msg">Loading slides…</span><canvas id="c" hidden></canvas></div>
+<div id="bar">
+  <button id="prev" aria-label="Previous slide">←</button>
+  <span id="count">–</span>
+  <button id="next" aria-label="Next slide">→</button>
+  <a class="btn" href="../deck.pdf">PDF</a>
+  <a class="btn" href="../">Read the paper</a>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const c=document.getElementById('c'),ctx=c.getContext('2d'),msg=document.getElementById('msg'),count=document.getElementById('count');
+let doc=null,i=1,busy=false;
+async function show(n){
+  if(!doc)return; n=Math.max(1,Math.min(doc.numPages,n)); i=n; location.hash=n;
+  count.textContent=n+' / '+doc.numPages;
+  if(busy)return; busy=true;
+  const page=await doc.getPage(n);
+  const base=page.getViewport({scale:1});
+  const fit=Math.min(innerWidth*0.96/base.width,(innerHeight-80)/base.height);
+  const dpr=window.devicePixelRatio||1;
+  const vp=page.getViewport({scale:fit*dpr});
+  c.width=vp.width;c.height=vp.height;c.style.width=(vp.width/dpr)+'px';c.style.height=(vp.height/dpr)+'px';
+  await page.render({canvasContext:ctx,viewport:vp}).promise;
+  busy=false; if(i!==n)show(i);
+}
+pdfjsLib.getDocument('../deck.pdf').promise.then(d=>{doc=d;msg.remove();c.hidden=false;show(parseInt(location.hash.slice(1))||1);})
+  .catch(()=>{msg.innerHTML='Could not load the slides here. <a style="color:#8fc4b3" href="../deck.pdf">Open the PDF</a>.';});
+document.getElementById('prev').onclick=e=>{e.stopPropagation();show(i-1)};
+document.getElementById('next').onclick=e=>{e.stopPropagation();show(i+1)};
+document.getElementById('stage').onclick=e=>show(e.clientX>innerWidth/2?i+1:i-1);
+addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key))show(i+1);if(['ArrowLeft','PageUp'].includes(e.key))show(i-1);});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>show(i),150)});
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)show(dx<0?i+1:i-1);tx=null});
+</script>
+</body></html>
